@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PostmarkIncommingMailParser.Test
+namespace PostmarkIncomingMailParser.Test
 {
     public class Parser
     {

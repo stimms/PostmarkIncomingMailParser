@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Xunit;
 using SharpTestsEx;
 
-namespace PostmarkIncommingMailParser.Test
+namespace PostmarkIncomingMailParser.Test
 {
     public class When_parsing_json
     {
@@ -97,7 +97,7 @@ namespace PostmarkIncommingMailParser.Test
         [Fact]
         public void From_is_parsed()
         {
-            var parser = new PostmarkIncommingMailParser.Parser();
+            var parser = new PostmarkIncomingMailParser.Parser();
             var result = parser.Parse(_testJSON);
             result.To.Should().Contain(new MailAddress("451d9b70cf9364d23ff6f9d51d870251569e+ahoy@inbound.postmarkapp.com", ""));
         }
