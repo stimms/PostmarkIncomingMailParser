@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostmarkIncommingMailParser", "PostmarkIncommingMailParser\PostmarkIncommingMailParser.csproj", "{EE919D4D-2501-4162-9C88-B3A55FC1C2C8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostmarkIncomingMailParser", "PostmarkIncomingMailParser\PostmarkIncomingMailParser.csproj", "{EE919D4D-2501-4162-9C88-B3A55FC1C2C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostmarkIncommingMailParser.Test", "PostmarkIncommingMailParser.Test\PostmarkIncommingMailParser.Test.csproj", "{E482C918-9990-44D7-A9EA-2141448C84D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostmarkIncomingMailParser.Test", "PostmarkIncomingMailParser.Test\PostmarkIncomingMailParser.Test.csproj", "{E482C918-9990-44D7-A9EA-2141448C84D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

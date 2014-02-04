@@ -7,8 +7,8 @@
     <ProjectGuid>{E482C918-9990-44D7-A9EA-2141448C84D2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PostmarkIncommingMailParser.Test</RootNamespace>
-    <AssemblyName>PostmarkIncommingMailParser.Test</AssemblyName>
+    <RootNamespace>PostmarkIncosmingMailParser.Test</RootNamespace>
+    <AssemblyName>PostmarkIncomingMailParser.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -56,9 +56,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PostmarkIncommingMailParser\PostmarkIncommingMailParser.csproj">
+    <ProjectReference Include="..\PostmarkIncomingMailParser\PostmarkIncomingMailParser.csproj">
       <Project>{ee919d4d-2501-4162-9c88-b3a55fc1c2c8}</Project>
-      <Name>PostmarkIncommingMailParser</Name>
+      <Name>PostmarkIncomingMailParser</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

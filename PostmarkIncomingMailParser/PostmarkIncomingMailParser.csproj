@@ -7,8 +7,8 @@
     <ProjectGuid>{EE919D4D-2501-4162-9C88-B3A55FC1C2C8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PostmarkIncommingMailParser</RootNamespace>
-    <AssemblyName>PostmarkIncommingMailParser</AssemblyName>
+    <RootNamespace>PostmarkIncomingMailParser</RootNamespace>
+    <AssemblyName>PostmarkIncomingMailParser</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
