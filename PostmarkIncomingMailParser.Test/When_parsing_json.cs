@@ -95,11 +95,60 @@ namespace PostmarkIncomingMailParser.Test
                                       ]
                                     }";
         [Fact]
-        public void From_is_parsed()
+        public void To_is_parsed()
         {
             var parser = new PostmarkIncomingMailParser.Parser();
             var result = parser.Parse(_testJSON);
             result.To.Should().Contain(new MailAddress("451d9b70cf9364d23ff6f9d51d870251569e+ahoy@inbound.postmarkapp.com", ""));
+        }
+        
+        [Fact]
+        public void From_is_parsed()
+        {
+            var parser = new PostmarkIncomingMailParser.Parser();
+            var result = parser.Parse(_testJSON);
+            result.From.Should().Be.EqualTo(new MailAddress("myUser@theirDomain.com", "John Doe"));
+        }
+
+        [Fact]
+        public void Subject_is_parsed()
+        {
+            var parser = new PostmarkIncomingMailParser.Parser();
+            var result = parser.Parse(_testJSON);
+            result.Subject.Should().Be.EqualTo("This is an inbound message");
+        }
+
+        [Fact]
+        public void Body_is_html_is_set_when_html_is_populated()
+        {
+            //any time we see text in the html body we assume the body is HTML... I don't know if that is right
+            var parser = new PostmarkIncomingMailParser.Parser();
+            var result = parser.Parse(_testJSON);
+            result.IsBodyHtml.Should().Be.True();
+        }
+
+        [Fact]
+        public void Body_is_html_is_not_set_when_html_is_not_populated()
+        {
+            //any time we see text in the html body we assume the body is HTML... I don't know if that is right
+            var parser = new PostmarkIncomingMailParser.Parser();
+            var result = parser.Parse(_testJSON.Replace("'HtmlBody': '[HTML(encoded)]',",""));
+            result.IsBodyHtml.Should().Be.False();
+        }
+
+        [Fact]
+        public void Headers_are_set()
+        {
+            var parser = new PostmarkIncomingMailParser.Parser();
+            var result = parser.Parse(_testJSON);
+            result.Headers.Count.Should().Be.EqualTo(8);
+        }
+        [Fact]
+        public void Headers_have_values()
+        {
+            var parser = new PostmarkIncomingMailParser.Parser();
+            var result = parser.Parse(_testJSON);
+            result.Headers.Get("MIME-Version").Should().Be.EqualTo("1.0");
         }
     }
 }

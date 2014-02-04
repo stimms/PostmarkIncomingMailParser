@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.CSharp.RuntimeBinder;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
@@ -14,16 +15,52 @@ namespace PostmarkIncomingMailParser
             var message = new PostmarkMailMessage();
             var parsedJson = System.Web.Helpers.Json.Decode(toParse);
 
+            PraseTo(message, parsedJson);
+            ParseFrom(message, parsedJson);
+            ParseSubject(message, parsedJson);
+            ParseIsBodyHTML(message, parsedJson);
+
+            foreach (dynamic header in parsedJson.Headers)
+            {
+                message.Headers.Add(header.Name, header.Value);
+            }
+
+            return message;
+        }
+        private static void ParseFrom(PostmarkMailMessage message, dynamic parsedJson)
+        {
+            message.From = new MailAddress(parsedJson.FromFull.Email, parsedJson.FromFull.Name);
+        }
+        private static void PraseTo(PostmarkMailMessage message, dynamic parsedJson)
+        {
             foreach (dynamic to in parsedJson.ToFull)
             {
                 message.To.Add(new MailAddress(to.Email, to.Name));
             }
-            
-            return message;
         }
+        private static void ParseSubject(PostmarkMailMessage message, dynamic parsedJson)
+        {
+            message.Subject = parsedJson.Subject;
+        }
+
+        private void ParseIsBodyHTML(PostmarkMailMessage message, dynamic parsedJson)
+        {
+            try
+            {
+                if (!String.IsNullOrWhiteSpace(parsedJson.HtmlBody))
+                    message.IsBodyHtml = true;
+                else
+                    message.IsBodyHtml = false;
+            }
+            catch (RuntimeBinderException)
+            {
+                message.IsBodyHtml = false;
+            }
+        }
+     
     }
 
-    public class PostmarkMailMessage: System.Net.Mail.MailMessage
+    public class PostmarkMailMessage : System.Net.Mail.MailMessage
     {
 
     }
