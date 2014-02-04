@@ -150,5 +150,39 @@ namespace PostmarkIncomingMailParser.Test
             var result = parser.Parse(_testJSON);
             result.Headers.Get("MIME-Version").Should().Be.EqualTo("1.0");
         }
+
+        [Fact]
+        public void Body_is_parsed_for_html_email()
+        {
+            var parser = new PostmarkIncomingMailParser.Parser();
+            var result = parser.Parse(_testJSON);
+            result.Body.Should().Be.EqualTo("[HTML(encoded)]");
+        }
+
+        [Fact]
+        public void Body_is_parsed_for_text_email()
+        {
+            var parser = new PostmarkIncomingMailParser.Parser();
+            var result = parser.Parse(_testJSON.Replace("'HtmlBody': '[HTML(encoded)]',", ""));
+            result.Body.Should().Be.EqualTo("[ASCII]");
+        }
+
+        [Fact]
+        public void Message_id_is_parsed()
+        {
+            var parser = new PostmarkIncomingMailParser.Parser();
+            var result = parser.Parse(_testJSON);
+            result.MessageId.Should().Be.EqualTo("22c74902-a0c1-4511-804f2-341342852c90");
+        }
+
+        [Fact]
+        public void Date_is_parsed()
+        {
+            var parser = new PostmarkIncomingMailParser.Parser();
+            var result = parser.Parse(_testJSON);
+            result.Date.Should().Be.EqualTo(new DateTime(2012, 4, 5, 8, 59, 1, DateTimeKind.Utc));
+        }
+
+        //Thu, 5 Apr 2012 16:59:01 +0200
     }
 }

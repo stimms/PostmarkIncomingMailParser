@@ -19,11 +19,11 @@ namespace PostmarkIncomingMailParser
             ParseFrom(message, parsedJson);
             ParseSubject(message, parsedJson);
             ParseIsBodyHTML(message, parsedJson);
+            ParseHeaders(message, parsedJson);
+            ParseBody(message, parsedJson);
+            ParseId(message, parsedJson);
 
-            foreach (dynamic header in parsedJson.Headers)
-            {
-                message.Headers.Add(header.Name, header.Value);
-            }
+            message.Date = DateTime.Parse(parsedJson.Date);
 
             return message;
         }
@@ -43,6 +43,24 @@ namespace PostmarkIncomingMailParser
             message.Subject = parsedJson.Subject;
         }
 
+        private static void ParseHeaders(PostmarkMailMessage message, dynamic parsedJson)
+        {
+            foreach (dynamic header in parsedJson.Headers)
+            {
+                message.Headers.Add(header.Name, header.Value);
+            }
+        }
+        private static void ParseBody(PostmarkMailMessage message, dynamic parsedJson)
+        {
+            if (message.IsBodyHtml)
+                message.Body = parsedJson.HtmlBody;
+            else
+                message.Body = parsedJson.TextBody;
+        }
+        private static void ParseId(PostmarkMailMessage message, dynamic parsedJson)
+        {
+            message.MessageId = parsedJson.MessageID;
+        }
         private void ParseIsBodyHTML(PostmarkMailMessage message, dynamic parsedJson)
         {
             try
@@ -62,6 +80,7 @@ namespace PostmarkIncomingMailParser
 
     public class PostmarkMailMessage : System.Net.Mail.MailMessage
     {
-
+        public String MessageId { get; set; }
+        public DateTime Date { get; set; }
     }
 }
