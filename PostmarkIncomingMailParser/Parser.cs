@@ -1,10 +1,9 @@
-﻿using Microsoft.CSharp.RuntimeBinder;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace PostmarkIncomingMailParser
 {
@@ -17,13 +16,14 @@ namespace PostmarkIncomingMailParser
 
             PraseTo(message, parsedJson);
             ParseFrom(message, parsedJson);
+            ParseCC(message, parsedJson);
             ParseSubject(message, parsedJson);
             ParseIsBodyHTML(message, parsedJson);
             ParseHeaders(message, parsedJson);
             ParseBody(message, parsedJson);
             ParseId(message, parsedJson);
-
-            message.Date = DateTime.Parse(parsedJson.Date);
+            ParseDate(message, parsedJson);
+            ParseAttachments(message, parsedJson);
 
             return message;
         }
@@ -38,6 +38,15 @@ namespace PostmarkIncomingMailParser
                 message.To.Add(new MailAddress(to.Email, to.Name));
             }
         }
+
+        private static void ParseCC(PostmarkMailMessage message, dynamic parsedJson)
+        {
+            foreach (dynamic cc in parsedJson.CCFull)
+            {
+                message.CC.Add(new MailAddress(cc.Email, cc.Name));
+            }
+        }
+
         private static void ParseSubject(PostmarkMailMessage message, dynamic parsedJson)
         {
             message.Subject = parsedJson.Subject;
@@ -61,6 +70,15 @@ namespace PostmarkIncomingMailParser
         {
             message.MessageId = parsedJson.MessageID;
         }
+        private void ParseAttachments(PostmarkMailMessage message, dynamic parsedJson)
+        {
+            foreach(var attachment in parsedJson.Attachments)
+                message.Attachments.Add(new Attachment(new MemoryStream(Convert.FromBase64String(attachment.Content)), attachment.Name, attachment.ContentType));
+        }
+        private static void ParseDate(PostmarkMailMessage message, dynamic parsedJson)
+        {
+            message.Date = DateTime.Parse(parsedJson.Date);
+        }
         private void ParseIsBodyHTML(PostmarkMailMessage message, dynamic parsedJson)
         {
             try
@@ -76,11 +94,5 @@ namespace PostmarkIncomingMailParser
             }
         }
      
-    }
-
-    public class PostmarkMailMessage : System.Net.Mail.MailMessage
-    {
-        public String MessageId { get; set; }
-        public DateTime Date { get; set; }
     }
 }

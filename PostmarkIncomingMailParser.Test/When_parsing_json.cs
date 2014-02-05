@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Xunit;
+using System;
 using System.Linq;
-using System.Net.Mail;
 using System.Text;
-using System.Threading.Tasks;
-using Xunit;
 using SharpTestsEx;
+using System.Net.Mail;
+using System.Collections.Generic;
 
 namespace PostmarkIncomingMailParser.Test
 {
@@ -94,6 +93,13 @@ namespace PostmarkIncomingMailParser.Test
                                         }
                                       ]
                                     }";
+        private string _fileContent = "I like traffic lights";
+
+        public When_parsing_json()
+        {
+            var bytes = Encoding.UTF8.GetBytes(_fileContent);
+            _testJSON = _testJSON.Replace("[BASE64-ENCODED CONTENT]", Convert.ToBase64String(bytes));
+        }
         [Fact]
         public void To_is_parsed()
         {
@@ -101,7 +107,15 @@ namespace PostmarkIncomingMailParser.Test
             var result = parser.Parse(_testJSON);
             result.To.Should().Contain(new MailAddress("451d9b70cf9364d23ff6f9d51d870251569e+ahoy@inbound.postmarkapp.com", ""));
         }
-        
+
+        [Fact]
+        public void CC_is_parsed()
+        {
+            var parser = new PostmarkIncomingMailParser.Parser();
+            var result = parser.Parse(_testJSON);
+            result.CC.Should().Contain(new MailAddress("sample.cc@emailDomain.com", "Full name"));
+        }
+
         [Fact]
         public void From_is_parsed()
         {
@@ -181,6 +195,26 @@ namespace PostmarkIncomingMailParser.Test
             var parser = new PostmarkIncomingMailParser.Parser();
             var result = parser.Parse(_testJSON);
             result.Date.Should().Be.EqualTo(new DateTime(2012, 4, 5, 8, 59, 1, DateTimeKind.Utc));
+        }
+
+        [Fact]
+        public void Attachments_are_created()
+        {
+            var parser = new PostmarkIncomingMailParser.Parser();
+            var result = parser.Parse(_testJSON);
+            result.Attachments.Count.Should().Be.EqualTo(2);
+        }
+
+        [Fact]
+        public void Attachments_are_correctly_encoded()
+        {
+            var parser = new PostmarkIncomingMailParser.Parser();
+            var result = parser.Parse(_testJSON);
+            var stream =result.Attachments.First().ContentStream;
+            var bytes = new byte[stream.Length];
+            stream.Read(bytes, 0, (int)stream.Length);
+            var fileContent = Encoding.UTF8.GetString(bytes);
+            fileContent.Should().Be.EqualTo(_fileContent);
         }
 
         //Thu, 5 Apr 2012 16:59:01 +0200
