@@ -13,6 +13,11 @@ namespace Sample
     public class WebApiApplication : System.Web.HttpApplication
     {
         public static MailMessage LastMailMessage { get; set; }
+        public static string LastMailMessageJson { get; set; }
+        public static DateTime LastMailMessageDate { get; set; }
+
+        public static Exception LastError { get; set; }
+        public static DateTime LastErrorDate { get; set; }
 
         protected void Application_Start()
         {

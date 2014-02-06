@@ -157,6 +157,23 @@ namespace PostmarkIncomingMailParser.Test
             var result = parser.Parse(_testJSON);
             result.Headers.Count.Should().Be.EqualTo(8);
         }
+
+        [Fact]
+        public void Empty_headers_are_not_set()
+        {
+            var parser = new PostmarkIncomingMailParser.Parser();
+            var result = parser.Parse(_testJSON.Replace("X-Spam-Checker-Version", ""));
+            result.Headers.Count.Should().Be.EqualTo(7);
+        }
+
+        [Fact]
+        public void Empty_headers_values_are_not_set()
+        {
+            var parser = new PostmarkIncomingMailParser.Parser();
+            var result = parser.Parse(_testJSON.Replace("No", ""));
+            result.Headers.Count.Should().Be.EqualTo(7);
+        }
+        
         [Fact]
         public void Headers_have_values()
         {

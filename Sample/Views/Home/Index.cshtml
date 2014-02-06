@@ -1,8 +1,20 @@
 ﻿@model System.Net.Mail.MailMessage
 <div class="jumbotron">
-    @if(Model != null){
-    <div>Message subject was: @Model.Subject</div>
-    } else{
-    <div>No previous e-mail found</div>
+    @if (Model != null)
+    {
+        <div>@WebApiApplication.LastMailMessageDate</div>
+        <div>Message subject was: <pre>@Model.Subject</pre></div>
+        
+    }
+    else
+    {
+        <div>No previous e-mail found</div>
+    }
+
+    @if (WebApiApplication.LastError != null)
+    {
+        <div>JSON is: @WebApiApplication.LastMailMessageJson</div>
+        <div>Error was at: @WebApiApplication.LastErrorDate</div>
+        <div>Error was: <pre>@WebApiApplication.LastError</pre></div>
     }
 </div>

@@ -72,3 +72,6 @@ Simplicity/Simplicity.Publish.xml
 *.orig
 
 App_Data/
+
+#good try, git, but my secrets will remain my own
+.pubxml.user

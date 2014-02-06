@@ -56,7 +56,8 @@ namespace PostmarkIncomingMailParser
         {
             foreach (dynamic header in parsedJson.Headers)
             {
-                message.Headers.Add(header.Name, header.Value);
+                if (!String.IsNullOrWhiteSpace(header.Name) && !String.IsNullOrWhiteSpace(header.Value))
+                    message.Headers.Add(header.Name, header.Value);
             }
         }
         private static void ParseBody(PostmarkMailMessage message, dynamic parsedJson)
@@ -72,7 +73,7 @@ namespace PostmarkIncomingMailParser
         }
         private void ParseAttachments(PostmarkMailMessage message, dynamic parsedJson)
         {
-            foreach(var attachment in parsedJson.Attachments)
+            foreach (var attachment in parsedJson.Attachments)
                 message.Attachments.Add(new Attachment(new MemoryStream(Convert.FromBase64String(attachment.Content)), attachment.Name, attachment.ContentType));
         }
         private static void ParseDate(PostmarkMailMessage message, dynamic parsedJson)
@@ -93,6 +94,6 @@ namespace PostmarkIncomingMailParser
                 message.IsBodyHtml = false;
             }
         }
-     
+
     }
 }
