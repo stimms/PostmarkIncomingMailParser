@@ -1,0 +1,8 @@
+﻿@model System.Net.Mail.MailMessage
+<div class="jumbotron">
+    @if(Model != null){
+    <div>Message subject was: @Model.Subject</div>
+    } else{
+    <div>No previous e-mail found</div>
+    }
+</div>

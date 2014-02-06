@@ -22,5 +22,13 @@ The simplest way is to set up a ASP.net MVC WebAPI page.
         //do something here with your mail message
     }
 
+The mail message which is returned is an extension of the standard System.Net.MailMessage. It adds a couple of extra fields which are postmark specific
+
+-MessageId - the ID of the message from postmark
+-Date - the date of the message (see the issues section)
+
 #Issues
+
 Everything here is done in memory so if you have a large attachment it is going to gobble up your memory like a donkey eating a waffle. There are some possible efficiencies which will help with that but I haven't implemented them. More work needs to be done with streams instead of converting attachments into strings.
+
+Also the timezones are almost certainly wrong because timezones are always wrong. I should probably take a dependency on noda.
