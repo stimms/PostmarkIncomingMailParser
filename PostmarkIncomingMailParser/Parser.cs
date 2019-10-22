@@ -1,20 +1,23 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Net.Mail;
-using System.Collections.Generic;
 using Microsoft.CSharp.RuntimeBinder;
 
 namespace PostmarkIncomingMailParser
 {
-    public class Parser
+    public interface IParser
+    {
+        PostmarkMailMessage Parse(string toParse);
+    }
+
+    public class Parser : IParser
     {
         public PostmarkMailMessage Parse(string toParse)
         {
             var message = new PostmarkMailMessage();
             var parsedJson = System.Web.Helpers.Json.Decode(toParse);
 
-            PraseTo(message, parsedJson);
+            ParseTo(message, parsedJson);
             ParseFrom(message, parsedJson);
             ParseCC(message, parsedJson);
             ParseSubject(message, parsedJson);
@@ -27,11 +30,13 @@ namespace PostmarkIncomingMailParser
 
             return message;
         }
+
         private static void ParseFrom(PostmarkMailMessage message, dynamic parsedJson)
         {
             message.From = new MailAddress(parsedJson.FromFull.Email, parsedJson.FromFull.Name);
         }
-        private static void PraseTo(PostmarkMailMessage message, dynamic parsedJson)
+
+        private static void ParseTo(PostmarkMailMessage message, dynamic parsedJson)
         {
             foreach (dynamic to in parsedJson.ToFull)
             {
@@ -56,10 +61,11 @@ namespace PostmarkIncomingMailParser
         {
             foreach (dynamic header in parsedJson.Headers)
             {
-                if (!String.IsNullOrWhiteSpace(header.Name) && !String.IsNullOrWhiteSpace(header.Value))
+                if (!string.IsNullOrWhiteSpace(header.Name) && !string.IsNullOrWhiteSpace(header.Value))
                     message.Headers.Add(header.Name, header.Value);
             }
         }
+
         private static void ParseBody(PostmarkMailMessage message, dynamic parsedJson)
         {
             if (message.IsBodyHtml)
@@ -67,33 +73,33 @@ namespace PostmarkIncomingMailParser
             else
                 message.Body = parsedJson.TextBody;
         }
+
         private static void ParseId(PostmarkMailMessage message, dynamic parsedJson)
         {
             message.MessageId = parsedJson.MessageID;
         }
+
         private void ParseAttachments(PostmarkMailMessage message, dynamic parsedJson)
         {
             foreach (var attachment in parsedJson.Attachments)
                 message.Attachments.Add(new Attachment(new MemoryStream(Convert.FromBase64String(attachment.Content)), attachment.Name, attachment.ContentType));
         }
+
         private static void ParseDate(PostmarkMailMessage message, dynamic parsedJson)
         {
             message.Date = DateTime.Parse(parsedJson.Date);
         }
+
         private void ParseIsBodyHTML(PostmarkMailMessage message, dynamic parsedJson)
         {
             try
             {
-                if (!String.IsNullOrWhiteSpace(parsedJson.HtmlBody))
-                    message.IsBodyHtml = true;
-                else
-                    message.IsBodyHtml = false;
+                message.IsBodyHtml = !string.IsNullOrWhiteSpace(parsedJson.HtmlBody);
             }
             catch (RuntimeBinderException)
             {
                 message.IsBodyHtml = false;
             }
         }
-
     }
 }
