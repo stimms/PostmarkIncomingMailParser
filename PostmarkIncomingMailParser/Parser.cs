@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Net.Mail;
 using Microsoft.CSharp.RuntimeBinder;
@@ -87,7 +88,7 @@ namespace PostmarkIncomingMailParser
 
         private static void ParseDate(PostmarkMailMessage message, dynamic parsedJson)
         {
-            message.Date = DateTime.Parse(parsedJson.Date);
+            message.Date = DateTime.Parse(parsedJson.Date, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
         }
 
         private void ParseIsBodyHTML(PostmarkMailMessage message, dynamic parsedJson)

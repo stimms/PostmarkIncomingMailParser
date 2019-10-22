@@ -211,7 +211,7 @@ namespace PostmarkIncomingMailParser.Test
         {
             var parser = new PostmarkIncomingMailParser.Parser();
             var result = parser.Parse(_testJSON);
-            result.Date.Should().Be.EqualTo(new DateTime(2012, 4, 5, 8, 59, 1, DateTimeKind.Utc));
+            result.Date.Should().Be.EqualTo(new DateTime(2012, 4, 5, 14, 59, 1, DateTimeKind.Utc));
         }
 
         [Fact]
