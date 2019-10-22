@@ -6,11 +6,6 @@ using Microsoft.CSharp.RuntimeBinder;
 
 namespace PostmarkIncomingMailParser
 {
-    public interface IParser
-    {
-        PostmarkMailMessage Parse(string toParse);
-    }
-
     public class Parser : IParser
     {
         public PostmarkMailMessage Parse(string toParse)
