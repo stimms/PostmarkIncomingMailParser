@@ -8,7 +8,7 @@
     <ProjectGuid>{E482C918-9990-44D7-A9EA-2141448C84D2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PostmarkIncosmingMailParser.Test</RootNamespace>
+    <RootNamespace>PostmarkIncomingMailParser.Test</RootNamespace>
     <AssemblyName>PostmarkIncomingMailParser.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -64,9 +64,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="When_parsing_json.cs" />
+    <Compile Include="ParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
