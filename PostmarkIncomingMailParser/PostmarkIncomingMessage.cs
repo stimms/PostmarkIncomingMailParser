@@ -5,18 +5,18 @@ using Newtonsoft.Json;
 
 namespace PostmarkIncomingMailParser
 {
-    public class PostmarkMessage
+    public class PostmarkIncomingMessage
     {
         public string FromName { get; set; }
         public string MessageStream { get; set; }
         //public string From { get; set; }
-        public FromFull FromFull { get; set; }
+        public EmailFull FromFull { get; set; }
         //public string To { get; set; }
-        public IList<ToFull> ToFull { get; set; }
+        public IList<EmailFull> ToFull { get; set; }
         //public string Cc { get; set; }
-        public IList<CcFull> CcFull { get; set; }
+        public IList<EmailFull> CcFull { get; set; }
         //public string Bcc { get; set; }
-        public IList<BccFull> BccFull { get; set; }
+        public IList<EmailFull> BccFull { get; set; }
         public string OriginalRecipient { get; set; }
         public string Subject { get; set; }
         [JsonProperty("MessageID")]
@@ -63,35 +63,15 @@ namespace PostmarkIncomingMailParser
             }
         }
 
-        public void AttachAttachments()
-        {
-            //foreach (var attachment in parsedJson.Attachments)
-            //    message.Attachments.Add(new Attachment(new MemoryStream(Convert.FromBase64String(attachment.Content)), attachment.Name, attachment.ContentType));
-        }
+        //public void AttachAttachments()
+        //{
+        //    // Left here for reference for how best to convert to actual attachment stream.
+        //    //foreach (var attachment in parsedJson.Attachments)
+        //    //    message.Attachments.Add(new Attachment(new MemoryStream(Convert.FromBase64String(attachment.Content)), attachment.Name, attachment.ContentType));
+        //}
     }
 
-    public class FromFull
-    {
-        public string Email { get; set; }
-        public string Name { get; set; }
-        public string MailboxHash { get; set; }
-    }
-
-    public class ToFull
-    {
-        public string Email { get; set; }
-        public string Name { get; set; }
-        public string MailboxHash { get; set; }
-    }
-
-    public class CcFull
-    {
-        public string Email { get; set; }
-        public string Name { get; set; }
-        public string MailboxHash { get; set; }
-    }
-
-    public class BccFull
+    public class EmailFull
     {
         public string Email { get; set; }
         public string Name { get; set; }
@@ -110,5 +90,7 @@ namespace PostmarkIncomingMailParser
         public string Content { get; set; }
         public string ContentType { get; set; }
         public int ContentLength { get; set; }
+        [JsonProperty("ContentID")]
+        public string ContentId { get; set; }
     }
 }

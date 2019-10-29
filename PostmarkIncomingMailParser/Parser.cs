@@ -6,18 +6,19 @@ namespace PostmarkIncomingMailParser
 {
     public class Parser : IParser
     {
-        public PostmarkMessage Parse(string toParse)
+        public PostmarkIncomingMessage Parse(string toParse)
         {
-            var message = JsonConvert.DeserializeObject<PostmarkMessage>(toParse);
+            var message = JsonConvert.DeserializeObject<PostmarkIncomingMessage>(toParse);
 
-            message.Headers = CleanUpHeaders(message.Headers);
+            if (message != null)
+                message.Headers = CleanUpHeaders(message.Headers);
 
             return message;
         }
 
         private IList<Header> CleanUpHeaders(IEnumerable<Header> headers)
         {
-            return headers.Where(header => !string.IsNullOrWhiteSpace(header.Name) && !string.IsNullOrWhiteSpace(header.Value)).ToList();
+            return headers?.Where(header => !string.IsNullOrWhiteSpace(header.Name) && !string.IsNullOrWhiteSpace(header.Value)).ToList();
         }
     }
 }

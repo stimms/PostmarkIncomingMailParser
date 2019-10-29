@@ -2,6 +2,6 @@
 {
     public interface IParser
     {
-        PostmarkMessage Parse(string toParse);
+        PostmarkIncomingMessage Parse(string toParse);
     }
 }

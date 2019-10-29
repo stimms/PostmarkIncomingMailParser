@@ -9,27 +9,47 @@ namespace PostmarkIncomingMailParser.Test
     public class When_parsing_json
     {
         private readonly string _testJson = @"{
+                                      'FromName': 'John Doe',
+                                      'MessageStream': 'inbound',
                                       'From': 'myUser@theirDomain.com',
                                       'FromFull': {
                                         'Email': 'myUser@theirDomain.com',
-                                        'Name': 'John Doe'
+                                        'Name': 'John Doe',
+                                        'MailboxHash' : ''
+
                                       },
                                       'To': '451d9b70cf9364d23ff6f9d51d870251569e+ahoy@inbound.postmarkapp.com',
                                       'ToFull': [
                                         {
                                           'Email': '451d9b70cf9364d23ff6f9d51d870251569e+ahoy@inbound.postmarkapp.com',
-                                          'Name': 'Jake Peralta'
+                                          'Name': 'Jake Peralta',
+                                          'MailboxHash' : '451d9b70cf9364d23ff6f9d51d870251569e'
                                         }
                                       ],
                                       'Cc': '\'Full name\' <sample.cc@emailDomain.com>, \'Another Cc\' <another.cc@emailDomain.com>',
                                       'CcFull': [
                                         {
                                           'Email': 'sample.cc@emailDomain.com',
-                                          'Name': 'Full name'
+                                          'Name': 'Full name',
+                                          'MailboxHash' : ''
                                         },
                                         {
                                           'Email': 'another.cc@emailDomain.com',
-                                          'Name': 'Another Cc'
+                                          'Name': 'Another Cc',
+                                          'MailboxHash' : ''
+                                        }
+                                      ],
+                                      'Bcc': '\'Full name\' <sample.bcc@emailDomain.com>, \'Another Bcc\' <another.bcc@emailDomain.com>',
+                                      'BccFull': [
+                                        {
+                                          'Email': 'sample.bcc@emailDomain.com',
+                                          'Name': 'Full name',
+                                          'MailboxHash' : ''
+                                        },
+                                        {
+                                          'Email': 'another.bcc@emailDomain.com',
+                                          'Name': 'Another Bcc',
+                                          'MailboxHash' : ''
                                         }
                                       ],
                                       'ReplyTo': 'myUsersReplyAddress@theirDomain.com',
@@ -109,6 +129,7 @@ namespace PostmarkIncomingMailParser.Test
 
             to.Email.Should().Be("451d9b70cf9364d23ff6f9d51d870251569e+ahoy@inbound.postmarkapp.com");
             to.Name.Should().Be("Jake Peralta");
+            to.MailboxHash.Should().Be("451d9b70cf9364d23ff6f9d51d870251569e");
         }
 
         [Fact]
@@ -121,6 +142,29 @@ namespace PostmarkIncomingMailParser.Test
 
             to.Email.Should().Be("sample.cc@emailDomain.com");
             to.Name.Should().Be("Full name");
+            to.MailboxHash.Should().Be("");
+        }
+
+        [Fact]
+        public void BCC_is_parsed()
+        {
+            var parser = new Parser();
+            var result = parser.Parse(_testJson);
+
+            var to = result.BccFull.First();
+
+            to.Email.Should().Be("sample.bcc@emailDomain.com");
+            to.Name.Should().Be("Full name");
+            to.MailboxHash.Should().Be("");
+        }
+
+        [Fact]
+        public void MessageStream_is_parsed()
+        {
+            var parser = new Parser();
+            var result = parser.Parse(_testJson);
+
+            result.MessageStream.Should().Be("inbound");
         }
 
         [Fact]
@@ -131,6 +175,7 @@ namespace PostmarkIncomingMailParser.Test
 
             result.FromFull.Email.Should().Be("myUser@theirDomain.com");
             result.FromFull.Name.Should().Be("John Doe");
+            result.FromFull.MailboxHash.Should().Be("");
         }
 
         [Fact]
@@ -227,6 +272,15 @@ namespace PostmarkIncomingMailParser.Test
             var parser = new Parser();
             var result = parser.Parse(_testJson);
             result.Attachments.Count.Should().Be.EqualTo(2);
+        }
+
+        [Fact]
+        public void Attachment_contentId_is_parsed()
+        {
+            var parser = new Parser();
+            var result = parser.Parse(_testJson);
+            var attachment = result.Attachments.First();
+            attachment.ContentId.Should().Be.EqualTo("myimage.png@01CE7342.75E71F80");
         }
 
         //[Fact]
