@@ -1,5 +1,5 @@
-# Postmark Inbound Webhook Mail Incoming Parser 
-### (Fork of [PostmarkIncomingMailParser](https://github.com/stimms/PostmarkIncomingMailParser))
+# Postmark Inbound Webhook Mail Parser 
+Fork of [PostmarkIncomingMailParser](https://github.com/stimms/PostmarkIncomingMailParser)
 
 [Postmark](https://postmarkapp.com/) provides a rock-solid transactional email service. Additionally, they have an inbound webhook mail service for use on Azure or other times when you don't want to have to deal with mail servers yourself. Or when you have unique requirements such as handling email sent to generated email addresses (see [this for just one example](https://postmarkapp.com/blog/how-to-process-generated-email-addresses-with-google-apps-and-postmark)). For transactional email, use [Postmark's .NET library for their API](https://github.com/wildbit/postmark-dotnet). However, for inbound webhook email processing, receiving mail involves setting up a page on your site or in your API which will take a posted JSON document. When people email your application, Postmark accepts and parses the email into a JSON representation and subsequently POSTs it to the given URL. Of course, parsing this incoming JSON data can be a bit tricky--this library makes the process much easier. 
 
