@@ -49,6 +49,7 @@ _ReSharper*/
 
 #NuGet
 packages/
+*.nupkg
 
 #Logging
 *.log.txt
