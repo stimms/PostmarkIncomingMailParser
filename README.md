@@ -1,21 +1,23 @@
-Postmark Mail Incoming Parser
+Postmark Inbound Webhook Mail Incoming Parser (Fork of [PostmarkIncomingMailParser](https://github.com/stimms/PostmarkIncomingMailParser))
 =============================
 
-[Postmark](https://postmarkapp.com/) provides a rock-solid transactional email service. Additionally, they have an inbound webhook mail service for use on Azure or other times when you don't want to have to deal with mail servers yourself. Or when you have unique requirements such as handling email sent to generated email addresses (see [this for just one example](https://postmarkapp.com/blog/how-to-process-generated-email-addresses-with-google-apps-and-postmark)). For transactional email, use [Postmark's .NET library for their API](https://github.com/wildbit/postmark-dotnet). However, for inbound email processing, receiving mail involves setting up a page on your site or in your API which will take a posted JSON document. When people email your application the email will be converted into a JSON representation and posted to the given URL. Of course, parsing this document can be a bit tricky--this library makes the process much easier. 
+[Postmark](https://postmarkapp.com/) provides a rock-solid transactional email service. Additionally, they have an inbound webhook mail service for use on Azure or other times when you don't want to have to deal with mail servers yourself. Or when you have unique requirements such as handling email sent to generated email addresses (see [this for just one example](https://postmarkapp.com/blog/how-to-process-generated-email-addresses-with-google-apps-and-postmark)). For transactional email, use [Postmark's .NET library for their API](https://github.com/wildbit/postmark-dotnet). However, for inbound webhook email processing, receiving mail involves setting up a page on your site or in your API which will take a posted JSON document. When people email your application, Postmark accepts and parses the email into a JSON representation and subsequently POSTs it to the given URL. Of course, parsing this incoming JSON data can be a bit tricky--this library makes the process much easier. 
 
-Note: this is a fork of https://github.com/stimms/PostmarkIncomingMailParser. It contains several breaking changes but deals with a couple of shortcomings including a switch to Newtonsoft.Json.JsonConvert (among many other advantages, it makes JSON payload maximum size much less of an issue), inclusion of ContentID for inline images as attachments, no reliance on System.Net.MailMessage (in case you want to use a non-SMTP third-party mail relay), and more.
+Note: this is a fork of https://github.com/stimms/PostmarkIncomingMailParser which appears to no longer be maintained. Many thanks to https://github.com/stimms for the original implementation. This implementation contains several breaking changes but deals with a couple of shortcomings including a switch to Newtonsoft.Json.JsonConvert (among many other advantages, it makes JSON payload maximum size much less of an issue), inclusion of ContentID for inline images as attachments, no reliance on System.Net.MailMessage (in case you want to use a non-SMTP third-party mail relay), and more.
 
 # Getting Postmark incoming mail parser
 
-The mail parser is in nuget so all you need to do is run 
+This forked mail parser is now also in nuget so simply run the following: 
+
+    install-package PostmarkInboundWebhookMailParser
+
+If you want the original that does not appear to be maintained anymore, run:
 
     install-package postmarkincomingmailparser
 
-Thank goodness for tab completion, huh? 
-
 # Using it
 
-First you should set up a url in the postmark settings under the incoming hook. This should be the final URL of your published end point. Obviously there cannot be a password around the API as there is nowhere to set it, but Postmark provides [some security recommendations here](https://postmarkapp.com/blog/putting-webhooks-to-work) and BASIC authentication is always an option as well. The ability to provide an auth token or credentials is something nice Postmark could add.
+First you should set up a URL in the Postmark settings under the incoming hook. This should be the final URL of your published end point. Obviously there cannot be a password around the API as there is nowhere to set it, but Postmark provides [some security recommendations here](https://postmarkapp.com/blog/putting-webhooks-to-work) and BASIC authentication is always an option as well. The ability to provide an auth token or credentials is something nice Postmark could add.
 
 The simplest way to set up a page to be the endpoint is to set up a ASP.net MVC WebAPI page. It can contain just a single method
 
@@ -41,7 +43,7 @@ Here's how to deal with inline images in HtmlBody:
 
      new PostmarkMessageAttachment(Convert.FromBase64String(attachment.Content), attachment.Name, attachment.ContentType, $"cid:{attachment.ContentId}")                         : 
 
-If ContentId is specified you know that it's an inline entity.
+If `ContentId` is specified you know that it's an inline entity.
 
 # Issues
 
