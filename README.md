@@ -19,7 +19,7 @@ If you want the original that does not appear to be maintained anymore, run:
 
 First you should set up a URL in the Postmark settings under the incoming hook. This should be the final URL of your published end point. Obviously there cannot be a password around the API as there is nowhere to set it, but Postmark provides [some security recommendations here](https://postmarkapp.com/blog/putting-webhooks-to-work) and BASIC authentication is always an option as well. The ability to provide an auth token or credentials is something nice Postmark could add.
 
-The simplest way to set up a page to be the endpoint is to set up a ASP.net MVC WebAPI page. It can contain just a single method
+The simplest way to set up a page to be the endpoint is to set up a ASP.net MVC WebAPI page. It can contain just a single method:
 
     public async void Post()
     {
