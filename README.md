@@ -5,7 +5,7 @@ Fork of [PostmarkIncomingMailParser](https://github.com/stimms/PostmarkIncomingM
 
 Note: this is a fork of https://github.com/stimms/PostmarkIncomingMailParser which appears to no longer be maintained. Many thanks to https://github.com/stimms for the original implementation. This implementation contains several breaking changes but deals with a couple of shortcomings including a switch to Newtonsoft.Json.JsonConvert (among many other advantages, it makes JSON payload maximum size much less of an issue), inclusion of ContentID for inline images as attachments, no reliance on System.Net.MailMessage (in case you want to use a non-SMTP third-party mail relay), and more.
 
-# Getting Postmark incoming mail parser
+# Getting It
 
 This forked mail parser is now also in nuget so simply run the following: 
 
@@ -15,7 +15,7 @@ If you want the original that does not appear to be maintained anymore, run:
 
     install-package postmarkincomingmailparser
 
-# Using it
+# Using It
 
 First you should set up a URL in the Postmark settings under the incoming hook. This should be the final URL of your published end point. Obviously there cannot be a password around the API as there is nowhere to set it, but Postmark provides [some security recommendations here](https://postmarkapp.com/blog/putting-webhooks-to-work) and BASIC authentication is always an option as well. The ability to provide an auth token or credentials is something nice Postmark could add.
 
@@ -33,7 +33,8 @@ The simplest way to set up a page to be the endpoint is to set up a ASP.net MVC 
 ~~-MessageId - the ID of the message from postmark
 -Date - the date of the message (see the issues section)~~
 
-## Handling attachments (inline and otherwise)
+
+## Handling Attachments (inline and otherwise)
 
 As to handling attachments to send via Postmark's transactional email service, you can easily add attachments to PostmarkMessage or TemplatedPostmarkMessage by converting the Base64 string into the required byte array: 
 
