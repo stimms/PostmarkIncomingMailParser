@@ -23,7 +23,7 @@ The simplest way to set up a page to be the endpoint is to set up a ASP.net MVC 
 
     public async void Post()
     {
-        var parser = new PostmarkIncomingMailParser.Parser(); // Or via dependency injection
+        var parser = new PostmarkInboundWebhookMailParser.Parser(); // Or via dependency injection
         var model = parser.Parse(await Request.Content.ReadAsStringAsync());
         //do something here with your mail message model such as mapping it to a dynamic template model you can send via https://github.com/wildbit/postmark-dotnet
     }
